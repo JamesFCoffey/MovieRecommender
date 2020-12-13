@@ -12,21 +12,17 @@ withBusyIndicatorUI <- function(button) {
   div(
     `data-for-btn` = id,
     button,
-    span(
-      class = "btn-loading-container",
-      hidden(
-        img(src = "ajax-loader-bar.gif", class = "btn-loading-indicator"),
-        icon("check", class = "btn-done-indicator")
-      )
-    ),
-    hidden(
-      div(class = "btn-err",
-          div(icon("exclamation-circle"),
-              tags$b("Error: "),
-              span(class = "btn-err-msg")
-          )
-      )
-    )
+    span(class = "btn-loading-container",
+         hidden(
+           img(src = "ajax-loader-bar.gif", class = "btn-loading-indicator"),
+           icon("check", class = "btn-done-indicator")
+         )),
+    hidden(div(class = "btn-err",
+               div(
+                 icon("exclamation-circle"),
+                 tags$b("Error: "),
+                 span(class = "btn-err-msg")
+               )))
   )
 }
 
@@ -34,8 +30,10 @@ withBusyIndicatorUI <- function(button) {
 # expression to run when the button is clicked
 withBusyIndicatorServer <- function(buttonId, expr) {
   # UX stuff: show the "busy" message, hide the other messages, disable the button
-  loadingEl <- sprintf("[data-for-btn=%s] .btn-loading-indicator", buttonId)
-  doneEl <- sprintf("[data-for-btn=%s] .btn-done-indicator", buttonId)
+  loadingEl <-
+    sprintf("[data-for-btn=%s] .btn-loading-indicator", buttonId)
+  doneEl <-
+    sprintf("[data-for-btn=%s] .btn-done-indicator", buttonId)
   errEl <- sprintf("[data-for-btn=%s] .btn-err", buttonId)
   shinyjs::disable(buttonId)
   shinyjs::show(selector = loadingEl)
@@ -51,10 +49,17 @@ withBusyIndicatorServer <- function(buttonId, expr) {
   tryCatch({
     value <- expr
     shinyjs::show(selector = doneEl)
-    shinyjs::delay(2000, shinyjs::hide(selector = doneEl, anim = TRUE, animType = "fade",
-                     time = 0.5))
+    shinyjs::delay(2000,
+                   shinyjs::hide(
+                     selector = doneEl,
+                     anim = TRUE,
+                     animType = "fade",
+                     time = 0.5
+                   ))
     value
-  }, error = function(err) { errorFunc(err, buttonId) })
+  }, error = function(err) {
+    errorFunc(err, buttonId)
+  })
 }
 
 # When an error happens after a button click, show the error
@@ -63,7 +68,9 @@ errorFunc <- function(err, buttonId) {
   errElMsg <- sprintf("[data-for-btn=%s] .btn-err-msg", buttonId)
   errMessage <- gsub("^ddpcr: (.*)", "\\1", err$message)
   shinyjs::html(html = errMessage, selector = errElMsg)
-  shinyjs::show(selector = errEl, anim = TRUE, animType = "fade")
+  shinyjs::show(selector = errEl,
+                anim = TRUE,
+                animType = "fade")
 }
 
 appCSS <- "

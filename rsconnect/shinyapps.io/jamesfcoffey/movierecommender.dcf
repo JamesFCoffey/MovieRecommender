@@ -1,0 +1,10 @@
+name: movierecommender
+title:
+username:
+account: jamesfcoffey
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3394335
+bundleId: 3981637
+url: https://jamesfcoffey.shinyapps.io/movierecommender/
+when: 1607841259.90771
